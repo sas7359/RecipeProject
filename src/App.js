@@ -11,6 +11,7 @@ class App extends React.Component {
       ingredients: [],
       resultingRecipes: []
     };
+    this.handleSearch = this.handleSearch.bind(this);
   }
 
   componentDidMount(){
@@ -20,6 +21,15 @@ class App extends React.Component {
         this.setState({ resultingRecipes: data})
       })
       
+  }
+
+  handleIngredientChange() {
+    // Given raw input, split comma separated ingredients and make an array of ingredients
+    // Use this.setstate({ingredient: newIngredientArray})
+  }
+
+  handleSearch() {
+    // Using the list or array of ingredients, build the search request and perform it
   }
 
   render() {
