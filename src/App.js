@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Container, Button, Row, Col, Card } from 'react-bootstrap';
+import { Form, Container, Button, Row, Col, Image, Card } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
@@ -80,15 +80,25 @@ class App extends React.Component {
             </Form>
             <br></br>
             <h2>Searched recipes:</h2>
-              {
+            <Row className="justify-content-md-center">
+            {
                 this.state.resultingRecipes.map((recipe) =>
-                    <Card key={recipe.id}>
-                      <Card.Body>
+                    <Card key={recipe.id} style={{ width: '18rem' }}>
+                      <br></br>
+                      <Image
+                            width={256}
+                            height={256}
+                            className="align-self-center mr-3"
+                            src={recipe.image}
+                            alt={recipe.title}
+                        fluid />
+                      <Card.Title>
                         {recipe.title}
-                      </Card.Body>
+                      </Card.Title>
                     </Card>
                 )
               } 
+            </Row>
         </Container>
       </div>
     )
