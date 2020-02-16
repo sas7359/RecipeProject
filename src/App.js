@@ -12,24 +12,51 @@ class App extends React.Component {
       resultingRecipes: []
     };
     this.handleSearch = this.handleSearch.bind(this);
+    this.handleIngredientChange = this.handleIngredientChange.bind(this);
+    this.buildRequest = this.buildRequest.bind(this);
+    this.doSearch = this.doSearch.bind(this);
   }
 
-  componentDidMount(){
-    fetch('https://api.spoonacular.com/recipes/findByIngredients?ingredients=apples,+flour,+sugar&number=2&apiKey=bc971f99f0344848a295b37d2d04d829')
-      .then(res => res.json())
-      .then((data) => {
-        this.setState({ resultingRecipes: data})
-      })
-      
+  handleIngredientChange(e) {
+    this.setState({
+      ingredients: e.target.value.split(','),
+    })
   }
 
-  handleIngredientChange() {
-    // Given raw input, split comma separated ingredients and make an array of ingredients
-    // Use this.setstate({ingredient: newIngredientArray})
-  }
-
-  handleSearch() {
+  buildRequest() {
     // Using the list or array of ingredients, build the search request and perform it
+    let ingredientString = "";
+    
+    // Build string containing ingredients to add to request
+    let i;
+    for (i = 0; i < this.state.ingredients.length; i++) {
+      if (i === 0) {
+        ingredientString += (this.state.ingredients[i] + ",")
+      } else {
+        ingredientString += ("+" + this.state.ingredients[i] + ",")
+      }
+    }
+    ingredientString = ingredientString.replace(/,\s*$/, "")
+    
+    return 'https://api.spoonacular.com/recipes/findByIngredients?ingredients=' + ingredientString + '&number=10&apiKey=bc971f99f0344848a295b37d2d04d829';
+  }
+
+  doSearch = (request) => fetch(request)
+      .then(res => res.json())
+      .then(data => {
+        this.setState({ resultingRecipes: data});
+      })
+      .catch(err => {
+        console.log(err);
+      })
+
+  handleSearch(e) {
+    e.preventDefault();
+    // Reference request
+    // https://api.spoonacular.com/recipes/findByIngredients?ingredients=apples,+flour,+sugar&number=2&apiKey=bc971f99f0344848a295b37d2d04d829
+
+    let request = this.buildRequest();
+    this.doSearch(request)
   }
 
   render() {
@@ -37,11 +64,11 @@ class App extends React.Component {
       <div className="App">
         <Container>
           <br></br>
-            <Form>
+            <Form onSubmit={this.handleSearch}>
               <Row className="justify-content-md-center">
                 <Col >
                   <Form.Group controlId="ingredientsForSearch">
-                    <Form.Control type="ingredients" placeholder="Enter ingredients.." />
+                    <Form.Control type="ingredients" placeholder="Enter ingredients.." onChange={this.handleIngredientChange}/>
                   </Form.Group>
                 </Col>
                 <Col xs lg="2">
@@ -55,7 +82,7 @@ class App extends React.Component {
             <h2>Searched recipes:</h2>
               {
                 this.state.resultingRecipes.map((recipe) =>
-                    <Card>
+                    <Card key={recipe.id}>
                       <Card.Body>
                         {recipe.title}
                       </Card.Body>
