@@ -107,13 +107,14 @@ class App extends React.Component {
               this.state.resultingRecipes.map((recipe) =>
                   <Card key={recipe.id} style={{ width: '18rem' }}>
                     <br></br>
-                    <Image
+                    <div className="text-center">
+                      <Image
                           width={256}
                           height={256}
-                          className="align-self-center mr-3"
                           src={recipe.image}
                           alt={recipe.title}
-                      fluid />
+                          fluid/>
+                    </div>
                       <Card.Body className="flex-column d-flex">
                         <Card.Title>
                           {recipe.title}
