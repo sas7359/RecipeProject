@@ -5,7 +5,7 @@ import '../css/App.css';
 import Modal from 'react-bootstrap/Modal';
 
 // Constant Variables
-const numberOfResults = 9
+const numberOfResults = 3
 
 class App extends React.Component {
 
