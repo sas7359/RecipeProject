@@ -2,6 +2,7 @@ import React from 'react';
 import { Form, Container, Button, Row, Col, Image, Card } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../css/App.css';
+import Modal from 'react-bootstrap/Modal';
 
 // Constant Variables
 const numberOfResults = 9
@@ -12,11 +13,14 @@ class App extends React.Component {
     super(props);
     this.state = {
       ingredients: [],
-      resultingRecipes: []
+      resultingRecipes: [],
+      showRecipe: false,
     };
     this.handleSearch = this.handleSearch.bind(this);
     this.handleIngredientChange = this.handleIngredientChange.bind(this);
     this.buildRequest = this.buildRequest.bind(this);
+    this.showRecipes = this.showRecipes.bind(this);
+    this.closeRecipes = this.closeRecipes.bind(this);
   }
 
   componentDidMount() {
@@ -80,6 +84,14 @@ class App extends React.Component {
 
   }
 
+  showRecipes(){
+    this.setState({showRecipe: true});
+  }
+
+  closeRecipes(){
+    this.setState({showRecipe: false});
+  }
+
   render() {
     return (
       <div className="App">
@@ -119,11 +131,26 @@ class App extends React.Component {
                         <Card.Title>
                           {recipe.title}
                         </Card.Title>
-                        <Button className="mt-auto" variant="success">View full recipe</Button>
+                        <Button className="mt-auto" variant="success" onClick={this.showRecipes}>View full recipe</Button>
                       </Card.Body>
                   </Card>
               )
-            } 
+            }
+            <Modal show={this.state.showRecipe} onHide={this.closeRecipes}>
+              <Modal.Header closeButton>
+                <Modal.Title>
+                  Recipe Title
+                </Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                Recipe/Instructions?
+              </Modal.Body>
+              <Modal.Footer>
+                <Button variant="primary" onClick={this.closeRecipes}>
+                  Close
+                </Button>
+              </Modal.Footer>
+            </Modal> 
             </Row>
         </Container>
       </div>
