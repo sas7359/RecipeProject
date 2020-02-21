@@ -9,7 +9,7 @@ const numberOfResults = 3
 const apiKeys = [
   'f9ca635dd36148128474e808f56ca996',
   'bc971f99f0344848a295b37d2d04d829',
-  '053c403cb3f34a599d8b22c9afa1293b----'
+  '053c403cb3f34a599d8b22c9afa1293b'
 ]
 
 class App extends React.Component {
