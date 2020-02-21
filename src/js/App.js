@@ -4,8 +4,13 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import '../css/App.css';
 import Modal from 'react-bootstrap/Modal';
 
-// Constant Variables
+// Constants
 const numberOfResults = 3
+const apiKeys = [
+  'f9ca635dd36148128474e808f56ca996',
+  'bc971f99f0344848a295b37d2d04d829',
+  '053c403cb3f34a599d8b22c9afa1293b----'
+]
 
 class App extends React.Component {
 
@@ -21,6 +26,7 @@ class App extends React.Component {
     this.buildRequest = this.buildRequest.bind(this);
     this.showRecipes = this.showRecipes.bind(this);
     this.closeRecipes = this.closeRecipes.bind(this);
+    this.fetchResults = this.fetchResults.bind(this);
   }
 
   componentDidMount() {
@@ -29,7 +35,7 @@ class App extends React.Component {
     fetch('spoonacularExampleResponse.json')
       .then(res => res.json())
       .then(data => {
-        this.setState({ resultingRecipes: data});
+        this.setState({ resultingRecipes: data });
       })
       .catch(err => {
         console.log(err);
@@ -42,7 +48,7 @@ class App extends React.Component {
     })
   }
 
-  buildRequest() {
+  buildRequest(apiKey) {
     // Using the list or array of ingredients, build the search request and perform it
     let ingredientString = "";
     
@@ -61,27 +67,42 @@ class App extends React.Component {
       + ingredientString 
       + '&number=' 
       + numberOfResults.toString() 
-      + '&apiKey=bc971f99f0344848a295b37d2d04d829';
+      + '&apiKey='
+      + apiKey;
   }
 
   handleSearch(e) {
     e.preventDefault();
     // Reference request
     // https://api.spoonacular.com/recipes/findByIngredients?ingredients=apples,+flour,+sugar&number=2&apiKey=bc971f99f0344848a295b37d2d04d829
-
-    let request = this.buildRequest();
-
     if (this.state.ingredients.length > 0) {
-      fetch(request)
+      this.fetchResults(apiKeys.length)
         .then(res => res.json())
         .then(data => {
-          this.setState({ resultingRecipes: data});
+          this.setState({ resultingRecipes: data });
         })
         .catch(err => {
           console.log(err);
         })
     }
 
+  }
+
+  fetchResults(numberOfKeys) {
+    let request = this.buildRequest(apiKeys[numberOfKeys - 1]);
+    
+    return fetch(request)
+      .then(res => {
+        if (res.ok) {
+          return res;
+        } else {
+          throw new Error("Not valid");
+        }
+      })
+      .catch(error => {
+        if ((numberOfKeys - 1) < 0) throw error;
+        return this.fetchResults(numberOfKeys - 1);
+      })
   }
 
   showRecipes(){
