@@ -9,7 +9,7 @@ const numberOfResults = 3
 const apiKeys = [
   'f9ca635dd36148128474e808f56ca996',
   'bc971f99f0344848a295b37d2d04d829',
-  '053c403cb3f34a599d8b22c9afa1293b----'
+  '053c403cb3f34a599d8b22c9afa1293b'
 ]
 
 class App extends React.Component {
@@ -23,7 +23,8 @@ class App extends React.Component {
     };
     this.handleSearch = this.handleSearch.bind(this);
     this.handleIngredientChange = this.handleIngredientChange.bind(this);
-    this.buildRequest = this.buildRequest.bind(this);
+    this.buildSearchRequest = this.buildSearchRequest.bind(this);
+    this.buildStepsRequests = this.buildStepsRequests.bind(this);
     this.showRecipes = this.showRecipes.bind(this);
     this.closeRecipes = this.closeRecipes.bind(this);
     this.fetchResults = this.fetchResults.bind(this);
@@ -48,7 +49,15 @@ class App extends React.Component {
     })
   }
 
-  buildRequest(apiKey) {
+  buildStepsRequests(apiKey, recipeId) {
+    return 'https://api.spoonacular.com/recipes/' 
+      + recipeId
+      + '/analyzedInstructions?apiKey='
+      + apiKey;
+
+  }
+
+  buildSearchRequest(apiKey) {
     // Using the list or array of ingredients, build the search request and perform it
     let ingredientString = "";
     
@@ -88,8 +97,13 @@ class App extends React.Component {
 
   }
 
-  fetchResults(numberOfKeys) {
-    let request = this.buildRequest(apiKeys[numberOfKeys - 1]);
+  fetchResults(requestType, numberOfKeys) {
+    let request;
+    if (requestType === "Search") {
+      request = this.buildSearchRequest(apiKeys[numberOfKeys - 1]);
+    } else {
+      request = this.buildStepsRequests(apiKeys[numberOfKeys-1], this.state.recipeId);
+    }
     
     return fetch(request)
       .then(res => {
@@ -118,7 +132,7 @@ class App extends React.Component {
       <div className="App">
         <Container>
           <br></br>
-          <Form onSubmit={this.handleSearch}>
+          <Form onSubmit={() => this.handleSearch()}>
             <Row className="justify-content-md-center">
               <Col style={{ paddingRight: 0}}>
                 <Form.Group controlId="validateIngredients">
