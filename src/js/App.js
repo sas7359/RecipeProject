@@ -21,6 +21,8 @@ class App extends React.Component {
       ingredients: [],
       resultingRecipes: [],
       showRecipe: false,
+      recipeId: 0,
+      recipeTitle: 0,
     };
     this.handleSearch = this.handleSearch.bind(this);
     this.handleIngredientChange = this.handleIngredientChange.bind(this);
@@ -106,8 +108,8 @@ class App extends React.Component {
       })
   }
 
-  showRecipes(){
-    this.setState({showRecipe: true});
+  showRecipes(recipeId,recipeTitle){
+    this.setState({showRecipe: true, recipeId, recipeTitle});
   }
 
   closeRecipes(){
@@ -153,12 +155,12 @@ class App extends React.Component {
                         <Card.Title>
                           {recipe.title}
                         </Card.Title>
-                        <Button className="mt-auto" variant="success" onClick={this.showRecipes}>View full recipe</Button>
+                        <Button className="mt-auto" variant="success" onClick={() => {this.showRecipes(recipe.id, recipe.title)}}>View full recipe</Button>
                       </Card.Body>
                   </Card>
               )
             }
-            <RecipeModal show={this.state.showRecipe} onHide={this.closeRecipes} />
+            <RecipeModal show={this.state.showRecipe} onHide={this.closeRecipes} modalId={this.state.recipeId} modalTitle={this.state.recipeTitle}/>
             </Row>
         </Container>
       </div>

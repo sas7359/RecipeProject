@@ -3,17 +3,17 @@ import Modal from 'react-bootstrap/Modal';
 import {Button} from 'react-bootstrap';
 
 export default class RecipeModal extends React.Component{
-    
+
     render(){
         return(
             <Modal {...this.props}>
               <Modal.Header closeButton>
                 <Modal.Title>
-                  Recipe Title
+                  {this.props.modalTitle}
                 </Modal.Title>
               </Modal.Header>
               <Modal.Body>
-                Recipe/Instructions?
+                {this.props.modalId}
               </Modal.Body>
               <Modal.Footer>
                 <Button variant="primary" onClick={this.props.onHide}>
