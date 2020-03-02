@@ -6,7 +6,7 @@ import '../css/App.css';
 import RecipeModal from './RecipeModal';
 
 // Constants
-const numberOfResults = 3
+const numberOfResults = 9
 const apiKeys = [
   'f9ca635dd36148128474e808f56ca996',
   'bc971f99f0344848a295b37d2d04d829',
