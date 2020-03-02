@@ -2,7 +2,8 @@ import React from 'react';
 import { Form, Container, Button, Row, Col, Image, Card } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../css/App.css';
-import Modal from 'react-bootstrap/Modal';
+//import Modal from 'react-bootstrap/Modal';
+import RecipeModal from './RecipeModal';
 
 // Constants
 const numberOfResults = 3
@@ -157,21 +158,7 @@ class App extends React.Component {
                   </Card>
               )
             }
-            <Modal show={this.state.showRecipe} onHide={this.closeRecipes}>
-              <Modal.Header closeButton>
-                <Modal.Title>
-                  Recipe Title
-                </Modal.Title>
-              </Modal.Header>
-              <Modal.Body>
-                Recipe/Instructions?
-              </Modal.Body>
-              <Modal.Footer>
-                <Button variant="primary" onClick={this.closeRecipes}>
-                  Close
-                </Button>
-              </Modal.Footer>
-            </Modal> 
+            <RecipeModal show={this.state.showRecipe} onHide={this.closeRecipes} />
             </Row>
         </Container>
       </div>
