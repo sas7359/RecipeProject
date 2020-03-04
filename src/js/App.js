@@ -24,6 +24,7 @@ class App extends React.Component {
       showRecipe: false,
       recipeId: 0,
       recipeTitle: 0,
+      recipe: [],
     };
     this.handleSearch = this.handleSearch.bind(this);
     this.handleIngredientChange = this.handleIngredientChange.bind(this);
@@ -116,7 +117,12 @@ class App extends React.Component {
   closeRecipes(){
     this.setState({showRecipe: false});
   }
-
+  async getRecipe(id){
+    const json = await fetch("https://api.spoonacular.com/recipes/" + id
+    + "/analyzedInstructions?apiKey=053c403cb3f34a599d8b22c9afa1293b")
+    .then(res => res.json())
+    return json;
+  }
   render() {
     return (
       <div className="App">
@@ -161,7 +167,7 @@ class App extends React.Component {
                   </Card>
               )
             }
-            <RecipeModal show={this.state.showRecipe} onHide={this.closeRecipes} modalId={this.state.recipeId} modalTitle={this.state.recipeTitle}/>
+            <RecipeModal show={this.state.showRecipe} onHide={this.closeRecipes} modalId={this.state.recipeId} modalTitle={this.state.recipeTitle} object={this.getRecipe(this.state.recipeId)}/>
             </Row>
         </Container>
       </div>

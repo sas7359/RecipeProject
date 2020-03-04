@@ -11,11 +11,15 @@ export default class RecipeModal extends React.Component{
     }
 
     getRecipe(id){
-        fetch("https://api.spoonacular.com/recipes/" + id
+        return fetch("https://api.spoonacular.com/recipes/" + id
         + "/analyzedInstructions?apiKey=053c403cb3f34a599d8b22c9afa1293b")
             .then(res => res.json())
             .then(data => {
                 this.setState({recipe: data});
+                console.log(data);
+            })
+            .catch(err => {
+              console.log(err);
             })
     }
     render(){
@@ -28,7 +32,14 @@ export default class RecipeModal extends React.Component{
               </Modal.Header>
               <Modal.Body>
                 {this.props.modalId}
-                {this.getRecipe(this.props.modalId)}
+                {this.state.recipe}
+                {this.props.object.toString()}
+                {/*this.props.object.map((step) => {
+                  return {step}
+                })*/}
+                {/*{this.state.recipe.map((step) => {
+                  <h1>{step}</h1>
+                })}*/}
               </Modal.Body>
               <Modal.Footer>
                 <Button variant="primary" onClick={this.props.onHide}>
