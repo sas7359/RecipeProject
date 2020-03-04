@@ -24,6 +24,7 @@ class App extends React.Component {
       showRecipe: false,
       recipeId: 0,
       recipeTitle: 0,
+      recipeSteps: [],
     };
     this.handleSearch = this.handleSearch.bind(this);
     this.handleIngredientChange = this.handleIngredientChange.bind(this);
@@ -31,6 +32,7 @@ class App extends React.Component {
     this.showRecipes = this.showRecipes.bind(this);
     this.closeRecipes = this.closeRecipes.bind(this);
     this.fetchResults = this.fetchResults.bind(this);
+    this.getRecipe = this.getRecipe.bind(this);
   }
 
   componentDidMount() {
@@ -44,6 +46,15 @@ class App extends React.Component {
       .catch(err => {
         console.log(err);
       })
+  }
+
+  getRecipe(id){
+    fetch("https://api.spoonacular.com/recipes/" + id
+    + "/analyzedInstructions?apiKey=f9ca635dd36148128474e808f56ca996")
+        .then(res => res.json())
+        .then(data => {
+            this.setState({recipeSteps: data[0].steps});
+        })
   }
 
   handleIngredientChange(e) {
@@ -110,6 +121,7 @@ class App extends React.Component {
   }
 
   showRecipes(recipeId,recipeTitle){
+    this.getRecipe(recipeId);
     this.setState({showRecipe: true, recipeId, recipeTitle});
   }
 
@@ -156,12 +168,12 @@ class App extends React.Component {
                         <Card.Title>
                           {recipe.title}
                         </Card.Title>
-                        <Button className="mt-auto" variant="success" onClick={() => {this.showRecipes(recipe.id, recipe.title)}}>View full recipe</Button>
+                          <Button className="mt-auto" variant="success" onClick={() => {this.showRecipes(recipe.id, recipe.title)}}>View full recipe</Button>
                       </Card.Body>
                   </Card>
               )
             }
-            <RecipeModal show={this.state.showRecipe} onHide={this.closeRecipes} modalId={this.state.recipeId} modalTitle={this.state.recipeTitle}/>
+            <RecipeModal show={this.state.showRecipe} onHide={this.closeRecipes} recipeSteps={this.state.recipeSteps} modalId={this.state.recipeId} modalTitle={this.state.recipeTitle}/>
             </Row>
         </Container>
       </div>
