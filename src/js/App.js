@@ -86,6 +86,24 @@ class App extends React.Component {
       + apiKey;
   }
 
+  handleInstructions(id, numberOfKeys) {
+    let request = this.getRecipe(id);
+
+    return fetch(request)
+      .then(res => {
+        if (res.ok) {
+          return res;
+        } else {
+          throw new Error("Not valid");
+        }
+      })
+      .catch(error => {
+        if ((numberOfKeys - 1) < 0) throw error;
+        return this.handleInstructions(numberOfKeys - 1);
+      })
+
+  }
+
   handleSearch(e) {
     e.preventDefault();
     // Reference request
@@ -121,7 +139,7 @@ class App extends React.Component {
   }
 
   showRecipes(recipeId,recipeTitle){
-    this.getRecipe(recipeId);
+    this.handleInstructions(recipeId, apiKeys.length);
     this.setState({showRecipe: true, recipeId, recipeTitle});
   }
 
@@ -173,7 +191,13 @@ class App extends React.Component {
                   </Card>
               )
             }
-            <RecipeModal show={this.state.showRecipe} onHide={this.closeRecipes} recipeSteps={this.state.recipeSteps} modalId={this.state.recipeId} modalTitle={this.state.recipeTitle}/>
+            <RecipeModal 
+              {...this.state}
+              show={this.state.showRecipe} 
+              onHide={this.closeRecipes} 
+              modalId={this.state.recipeId} 
+              modalTitle={this.state.recipeTitle}
+            />
             </Row>
         </Container>
       </div>
