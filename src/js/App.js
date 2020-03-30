@@ -129,7 +129,7 @@ class App extends React.Component {
                 <Form.Group controlId="validateIngredients">
                   <Form.Control required type="ingredients" placeholder="Enter ingredients.." onChange={this.handleIngredientChange}/>
                   <Form.Control.Feedback type="invalid">
-                    Please select atleast one ingredient!
+                    Please select at least one ingredient!
                   </Form.Control.Feedback>
                 </Form.Group>
               </Col>

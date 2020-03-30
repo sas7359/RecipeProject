@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import {Button} from 'react-bootstrap';
+import ReactToPrint from 'react-to-print';
 
 export default class RecipeModal extends React.Component{
     constructor(props){
@@ -29,6 +30,9 @@ export default class RecipeModal extends React.Component{
               <Modal.Body>
                 {this.props.modalId}
                 {this.getRecipe(this.props.modalId)}
+                <div>
+                    <button onClick={() => window.print()}>Print this recipe!</button>
+                </div>
               </Modal.Body>
               <Modal.Footer>
                 <Button variant="primary" onClick={this.props.onHide}>
@@ -37,5 +41,19 @@ export default class RecipeModal extends React.Component{
               </Modal.Footer>
             </Modal>
         )
+    }
+}
+
+class Print extends React.Component {
+    render() {
+        return (
+            <div>
+                <ReactToPrint
+                    trigger={() => <a href="#">Print this out!</a>}
+                    content={() => this.componentRef}
+                />
+                <RecipeModal ref={el => (this.componentRef = el)} />
+            </div>
+        );
     }
 }
